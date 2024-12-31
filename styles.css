@@ -1,0 +1,193 @@
+/* ===============================
+   1. CSS VARIABLES
+   (Will be updated dynamically from timeline.yaml)
+=============================== */
+:root {
+    --background-color: #000;    /* fallback if not found in YAML */
+    --primary-color: #0d6efd;    /* fallback for navbar/footer */
+    --timeline-color: red;       /* fallback for timeline accent */
+    --title-color: red;          /* fallback for main titles */
+    --time-color: red;           /* fallback for time text */
+    --text-color: red;           /* fallback for normal text */
+  }
+  
+  /* ===============================
+     2. GLOBAL STYLES
+  =============================== */
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Navbar / .bg-primary override */
+  .navbar.bg-primary,
+  .bg-primary {
+    background-color: var(--primary-color) !important;
+  }
+  
+  /* ===============================
+     3. HERO SECTION
+  =============================== */
+  .hero-section {
+    min-height: 60vh;
+    width: 100%;
+    background-color: var(--background-color);
+    padding-top: 3.5rem; /* ensures no overlap with sticky navbar */
+  }
+  
+  .hero-section h1,
+  .hero-section p {
+    color: var(--title-color);
+  }
+  
+  /* ===============================
+     4. VERTICAL TIMELINE STYLES
+  =============================== */
+  #timelineContainer {
+    width: 100%;
+    margin: 0 auto;
+    /* We rely on .timeline for centering the actual line & cards */
+  }
+  
+  /* The timeline wrapper (centered in the container) */
+  .timeline {
+    position: relative;
+    margin: 0 auto;
+    padding: 2rem 0;
+    max-width: 800px; /* keep it narrower for a nice centered effect */
+  }
+  
+  /* Vertical line behind the timeline items */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 60px; /* The vertical red line is at 60px from .timeline's left edge */
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: var(--timeline-color);
+  }
+  
+  /* 
+     Timeline card is offset from the line, 
+     leaving a gap for the circle, so the line 
+     + circle don't overlap the card.
+  */
+  .timeline-card {
+    position: relative;
+    margin: 2rem 0 2rem 120px; /* Card starts at 120px from .timeline's left, 
+                                  giving us 60px for the line + 
+                                  leftover space for the dot and gap */
+    max-width: 600px;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  
+    /* Smooth transition if you use the "active" zoom effect */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* The timeline “dot” for each card */
+  .timeline-card::before {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: var(--timeline-color);
+    border-radius: 50%;
+  
+    /* Place the circle so it is centered vertically on the card 
+       and horizontally aligned with the vertical line. */
+    top: 50%;
+    transform: translateY(-50%);
+    
+    /* This is the trick: 
+       - The .timeline-card is offset at 120px 
+       - The line is at 60px
+       => The difference is 60px 
+       => We want, say, a ~12px gap from line to circle 
+       => So the circle's center sits at ~48px from the card's left. */
+    left: -72px; /* (120px - 60px) = 60px difference to the line, minus 12 => -72 
+                   Tweak for just the right gap. 
+                   The circle's center will be at -72 + 8 = -64 px from the card's left, 
+                   so that is 120 - 64 = 56 px from .timeline's left. The line is at 60px. 
+                   => ~4px of gap between the circle and the line. */
+  }
+  
+  /* Always display card-content */
+  .timeline-card .card-content {
+    display: block;
+  }
+  
+  /* Card Title */
+  .timeline-card h3 {
+    color: var(--title-color);
+    margin: 0;
+    padding-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  /* Time text */
+  .timeline-card .time {
+    color: var(--time-color);
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Body text */
+  .timeline-card p {
+    color: var(--text-color);
+  }
+  
+  /* If the user provides an image link to click */
+  .card-image-clickable {
+    cursor: pointer;
+  }
+  
+  .timeline-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+  }
+  
+  /* 
+     4A) (Optional) Zoom effect when "active" 
+     (if you uncomment the IntersectionObserver code in main.js)
+  */
+  .timeline-card.active {
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  }
+  
+  /* ===============================
+     5. RESPONSIVENESS
+  =============================== */
+  @media (max-width: 768px) {
+    .hero-section {
+      min-height: 40vh;
+      padding-top: 4.5rem; 
+    }
+  
+    .timeline {
+      max-width: 90%;
+    }
+  
+    .timeline::before {
+      left: 40px; /* The line is closer to the left on smaller screens */
+    }
+  
+    .timeline-card {
+      margin: 2rem 0 2rem 80px; 
+    }
+  
+    .timeline-card::before {
+      left: -52px; 
+    }
+  }
+  
